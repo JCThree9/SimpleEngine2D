@@ -31,7 +31,7 @@ public class EngineGame : Game
     /// <summary>The camera. Adjust Position and Zoom to move the view.</summary>
     public Camera Camera => _camera;
 
-    /// <summary>The debug overlay. Toggle with F1.</summary>
+    /// <summary>The debug overlay. Toggle with F1 in sample game .</summary>
     public DebugOverlay Debug => _debug;
 
     /// <summary>Window width in pixels.</summary>
@@ -60,7 +60,7 @@ public class EngineGame : Game
         Window.Title = title;
         Window.AllowUserResizing = true;
 
-        // Wire up scene manager's reference to us
+        // Wires up scene manager's reference to us
         Scenes.Game = this;
     }
 

@@ -16,9 +16,10 @@ public class GameScene : Scene
 
     public override void Initialize()
     {
-        // Create the player at the center of the screen
+        // Create the player at world origin (0,0)
+        // The camera is centered on (0,0), so this appears at the center of the screen
         _player = new GameObject("Player");
-        _player.Transform.Position = new Vector2(Game!.ScreenWidth / 2f, Game.ScreenHeight / 2f);
+        _player.Transform.Position = Vector2.Zero;
         _player.AddComponent(new PlayerController { MoveSpeed = 250f });
         AddGameObject(_player);
     }
@@ -41,9 +42,9 @@ public class GameScene : Scene
             Color.Cyan
         );
 
-        // Draw some ground reference
+        // Draw a ground bar across the world, below center
         renderer.DrawRect(
-            new Rectangle(0, (int)(Game!.ScreenHeight * 0.7f), Game.ScreenWidth, 20),
+            new Rectangle(-1000, 200, 2000, 20),
             Color.DarkGray
         );
     }

@@ -6,8 +6,8 @@ namespace Engine.Debug;
 
 /// <summary>
 /// Simple on-screen debug overlay showing FPS, entity count, and scene info.
-/// Toggle with F1. No ImGui dependency — uses SpriteFont for simplicity.
-/// ImGui can be integrated later as a v2 enhancement.
+/// Toggle with F1. Just an overlay right now.
+/// ImGui can be integrated later for some of the features we planned
 /// </summary>
 public class DebugOverlay
 {
@@ -67,7 +67,7 @@ public class DebugOverlay
 
         // Background panel
         var panelHeight = lineHeight * 5 + 10;
-        // We'll just draw text — a simple approach
+        // We'll just draw text for now 
 
         DrawLine($"FPS: {_currentFps:F1}", x, y, textColor);
         y += lineHeight;

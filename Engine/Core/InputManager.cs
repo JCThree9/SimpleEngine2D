@@ -24,7 +24,7 @@ public class InputManager
         _currentMouse = Mouse.GetState();
     }
 
-    // ── Keyboard ──────────────────────────────────────
+    // ── Keyboard 
 
     /// <summary>True only on the frame the key was first pressed.</summary>
     public bool IsKeyPressed(Keys key) =>
@@ -38,7 +38,7 @@ public class InputManager
     public bool IsKeyReleased(Keys key) =>
         !_currentKeys.IsKeyDown(key) && _previousKeys.IsKeyDown(key);
 
-    // ── Mouse ─────────────────────────────────────────
+    // ── Mouse 
 
     /// <summary>Current mouse position in screen coordinates.</summary>
     public Vector2 MousePosition => _currentMouse.Position.ToVector2();

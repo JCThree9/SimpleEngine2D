@@ -46,14 +46,14 @@ public class SceneManager
 
     /// <summary>
     /// Clear the entire stack and push a new scene.
-    /// Use this for full scene transitions (e.g. menu → gameplay).
+    /// Use this for full scene transitions (e.g. main menu → gameplay).
     /// </summary>
     public void Switch(Scene scene)
     {
         _pendingScene = scene;
         _pendingAction = PendingAction.Switch;
     }
-
+    //These classes use the internal methods from Scene to maintain updates to data only happening once every frame
     internal void Update(GameTime gameTime)
     {
         ProcessPending();

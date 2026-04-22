@@ -11,10 +11,11 @@ namespace Engine.GameObjects;
 public class GameObject
 {
     private readonly List<Component> _components = new();
+    //These pending lists exist for the same reason we have a buffer in SceneManager, to avoid data being altered mid frame
     private readonly List<Component> _pendingAdd = new();
     private readonly List<Component> _pendingRemove = new();
 
-    /// <summary>Display name — useful for debugging.</summary>
+    /// <summary>Display name for debugging.</summary>
     public string Name { get; set; }
 
     /// <summary>Whether this object is active. Inactive objects skip Update/Draw.</summary>
@@ -23,7 +24,7 @@ public class GameObject
     /// <summary>The scene this object belongs to (set automatically when added to a scene).</summary>
     public Scene? Scene { get; internal set; }
 
-    /// <summary>Position, rotation, and scale.</summary>
+    /// <summary>Position, rotation, and scale. Important to note, Transform is NOT a component, its a required object that must be attatched to a game object</summary>
     public Transform Transform { get; } = new();
 
     public GameObject(string name = "GameObject")

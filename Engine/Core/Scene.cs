@@ -7,7 +7,7 @@ namespace Engine.Core;
 /// <summary>
 /// A scene is a self-contained game state (main menu, gameplay, pause screen, etc.).
 /// Each scene owns a list of GameObjects.
-/// Extend this class and override Initialize, Update, and Draw.
+/// Extend this class and override Initialize, Update, and Draw to create game specific logic.
 /// </summary>
 public abstract class Scene
 {
@@ -59,7 +59,7 @@ public abstract class Scene
 
     /// <summary>Override to draw scene-level visuals (backgrounds, UI, etc.).</summary>
     public abstract void Draw(Renderer renderer);
-
+    // These methods are used internally to maintain and use a buffer. This is required so data is not altered mid frame thus the "internal" names
     internal void InternalInitialize(EngineGame game)
     {
         if (_initialized) return;

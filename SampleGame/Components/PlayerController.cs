@@ -26,7 +26,7 @@ public class PlayerController : Component
         if (Input.IsKeyHeld(Keys.D) || Input.IsKeyHeld(Keys.Right))
             direction.X += 1;
 
-        // Normalize so diagonal movement isn't faster
+        // Normalize so diagonal movement isn't faster, this is a classic video game problem
         if (direction != Vector2.Zero)
             direction = Vector2.Normalize(direction);
 

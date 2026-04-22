@@ -50,7 +50,7 @@ public class Renderer
         _spriteBatch.End();
     }
 
-    // ── Draw helpers ──────────────────────────────────
+    // Draw helpers 
 
     /// <summary>Draw a texture at a position.</summary>
     public void DrawSprite(Texture2D texture, Vector2 position, Color? color = null,
