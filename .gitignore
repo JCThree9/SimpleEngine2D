@@ -8,8 +8,6 @@ obj/
 *.user
 *.suo
 
-## dotnet tool config
-.config/
 
 ## OS files
 Thumbs.db
