@@ -72,7 +72,11 @@ public class HubScene : Scene
     public override void Update(GameTime gameTime)
     {
         // If the project name input is active, update it and skip all other input
-        
+        if (projectnamevisi)
+        {
+            _ProjectNameInput.Update(gameTime);
+            return; // Skip all other input while naming
+        }
 
         _testInput.Update(gameTime);
         _inputCooldown -= Time.DeltaTime;
