@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.Marshalling;
 using Engine.Core;
 using Engine.Rendering;
 using Microsoft.Xna.Framework;
@@ -16,6 +18,10 @@ public class HubScene : Scene
     private int _selectedIndex = 0;
     private SpriteFont? _font;
     private float _inputCooldown = 0f;
+
+    //variables for new project creation
+    private string tempFileTestMessage="";
+    private string tempFileName = "NewProjectTest";
 
     public override void Initialize()
     {
@@ -62,6 +68,12 @@ public class HubScene : Scene
             ScanProjects();
         }
 
+        //new Project
+        if (Input.IsKeyPressed(Keys.F3))
+        {
+            CreateNewProject();
+        }
+
         // Quit
         if (Input.IsKeyPressed(Keys.Escape))
         {
@@ -83,8 +95,11 @@ public class HubScene : Scene
         renderer.SpriteBatch.DrawString(_font, "SimpleEngine2D - Project Hub",
             new Vector2(20, 20), Color.White);
 
-        renderer.SpriteBatch.DrawString(_font, "[Enter] Launch  [F5] Refresh  [Esc] Quit",
+        renderer.SpriteBatch.DrawString(_font, "[Enter] Launch  [F3] New Project  [F5] Refresh  [Esc] Quit",
             new Vector2(600, 20), Color.Gray);
+
+        //temporary message for printing debugging messages for project hub code
+        //renderer.SpriteBatch.DrawString(_font, tempFileTestMessage,new Vector2(100, 300), Color.Gray);
 
         if (_projectPaths.Count == 0)
         {
@@ -135,7 +150,7 @@ public class HubScene : Scene
             var dirName = Path.GetFileName(dir);
 
             // Skip the engine, this hub, and hidden/build directories
-            if (dirName == "Engine" || dirName == "ProjectHub" ||
+            if (dirName == "Engine" || dirName == "ProjectHub" ||dirName == "DontDelete" ||
                 dirName.StartsWith(".") || dirName == "obj" || dirName == "bin")
                 continue;
 
@@ -148,5 +163,53 @@ public class HubScene : Scene
         }
 
         _selectedIndex = Math.Clamp(_selectedIndex, 0, Math.Max(0, _projectPaths.Count - 1));
+    }
+
+    //still implementing, makes a new game project
+    private void CreateNewProject()
+    {
+        // Look for .csproj files in sibling directories
+        var hubDir = AppDomain.CurrentDomain.BaseDirectory;
+
+        // Navigate up to the solution root (bin/Debug/net9.0 → project → solution)
+        var solutionDir = Path.GetFullPath(Path.Combine(hubDir, "..", "..", "..", ".."));
+
+        //takes original solution directory and makes a copy of the "DontDelete" project to use as a template for new projects
+        var originalSolutionDir = solutionDir;
+        var copiedProjectDir = Path.Combine(originalSolutionDir, "DontDelete");
+
+        //Combines directory with projectname to make new project directory
+        solutionDir = Path.Combine(solutionDir, tempFileName);
+
+        //file test message for debugging
+        //tempFileTestMessage = "Creating new project in " + solutionDir+"\nCopied from template at " + copiedProjectDir;
+
+        //makes the file paths into directory info objects for easier information transfer
+        var sourceDir = new DirectoryInfo(copiedProjectDir);
+        var targetDir = new DirectoryInfo(solutionDir);
+
+        CopyDir(sourceDir, targetDir);
+
+        ScanProjects(); // Refresh the project list to include the new project
+    }
+
+    //helper method for copying directories
+    private void CopyDir(DirectoryInfo sourceDir, DirectoryInfo targetDir)
+    {
+        Directory.CreateDirectory(targetDir.FullName);
+
+        //subdir copying
+        foreach (var subDir in sourceDir.GetDirectories())
+        {
+            var tarSubDir = targetDir.CreateSubdirectory(subDir.Name);
+            CopyDir(subDir, tarSubDir);
+        }
+
+
+        //File copying
+        foreach (var file in sourceDir.GetFiles())
+        {
+            file.CopyTo(Path.Combine(targetDir.FullName, file.Name), true);
+        }
     }
 }
