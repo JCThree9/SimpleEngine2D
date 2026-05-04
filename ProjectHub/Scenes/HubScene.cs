@@ -5,6 +5,7 @@ using Engine.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SimpleEngine2D.Engine.UI;
 
 namespace ProjectHub.Scenes;
 
@@ -14,6 +15,7 @@ namespace ProjectHub.Scenes;
 /// </summary>
 public class HubScene : Scene
 {
+    private TextInputField _testInput;
     private List<string> _projectPaths = new();
     private int _selectedIndex = 0;
     private SpriteFont? _font;
@@ -25,6 +27,8 @@ public class HubScene : Scene
 
     public override void Initialize()
     {
+        _testInput = new TextInputField(new Rectangle(50, 500, 300, 40), "Type here");
+        _testInput.Activate(Game!.Window);
         UseCamera = false; // UI-only scene, draw in screen space
         ScanProjects();
 
@@ -41,6 +45,7 @@ public class HubScene : Scene
 
     public override void Update(GameTime gameTime)
     {
+        _testInput.Update(gameTime);
         _inputCooldown -= Time.DeltaTime;
         if (_inputCooldown > 0) return;
 
@@ -66,6 +71,14 @@ public class HubScene : Scene
         if (Input.IsKeyPressed(Keys.F5))
         {
             ScanProjects();
+        }
+        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+        {
+
+        if (_testInput.ContainsPoint(Mouse.GetState().Position))
+        {
+        _testInput.Activate(Game!.Window);
+        }
         }
 
         //new Project
@@ -131,6 +144,10 @@ public class HubScene : Scene
             renderer.SpriteBatch.DrawString(_font, safePath,
                 new Vector2(300, y + 12), Color.DarkGray);
         }
+        // Draw test input field
+        var pixel = new Texture2D(Game!.GraphicsDevice, 1, 1);
+        pixel.SetData(new[] { Color.White });
+        _testInput.Draw(renderer.SpriteBatch, _font!, pixel);
     }
 
     private void ScanProjects()
