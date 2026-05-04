@@ -44,6 +44,29 @@ public class HubScene : Scene
         {
             // Font not available — will draw rectangles as fallback
         }
+
+        //projectcreation initlizations
+        _pixel2 = new Texture2D(Game!.GraphicsDevice, 1, 1);
+        _pixel2.SetData(new[] { Color.White });
+        _ProjectNameInput = new TextInputField(new Rectangle(200, 300, 400, 40), "");
+        // When they press Enter
+        _ProjectNameInput.OnConfirmed += (name) =>
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                tempFileName = name;
+                CreateNewProject();
+            }
+            projectnamevisi = false;
+            _ProjectNameInput.Deactivate(Game!.Window);
+        };
+        // When they press Escape
+        _ProjectNameInput.OnCancelled += () =>
+        {
+            projectnamevisi = false;
+            _ProjectNameInput.Deactivate(Game!.Window);
+        };
+
     }
 
     public override void Update(GameTime gameTime)
