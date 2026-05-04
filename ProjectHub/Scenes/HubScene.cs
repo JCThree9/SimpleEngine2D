@@ -59,12 +59,14 @@ public class HubScene : Scene
             }
             projectnamevisi = false;
             _ProjectNameInput.Deactivate(Game!.Window);
+             _inputCooldown = 0.5f;
         };
         // When they press Escape
         _ProjectNameInput.OnCancelled += () =>
         {
             projectnamevisi = false;
             _ProjectNameInput.Deactivate(Game!.Window);
+             _inputCooldown = 0.5f;
         };
 
     }
