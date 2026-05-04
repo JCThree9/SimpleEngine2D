@@ -242,9 +242,6 @@ public class HubScene : Scene
         var originalSolutionDir = solutionDir;
         var copiedProjectDir = Path.Combine(originalSolutionDir, "DontDelete");
 
-        //request input of new file name 
-        //tempfilename should get changed in order to change the actual file name of new projects
-
 
         if(tempFileName=="")
         {
