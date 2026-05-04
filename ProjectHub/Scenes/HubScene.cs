@@ -22,6 +22,9 @@ public class HubScene : Scene
     private float _inputCooldown = 0f;
 
     //variables for new project creation
+    private Texture2D _pixel2;
+    private TextInputField _ProjectNameInput;
+    Boolean projectnamevisi=false;
     private string tempFileTestMessage="";
     private string tempFileName = "NewProjectTest";
 
@@ -45,6 +48,9 @@ public class HubScene : Scene
 
     public override void Update(GameTime gameTime)
     {
+        // If the project name input is active, update it and skip all other input
+        
+
         _testInput.Update(gameTime);
         _inputCooldown -= Time.DeltaTime;
         if (_inputCooldown > 0) return;
@@ -84,7 +90,9 @@ public class HubScene : Scene
         //new Project
         if (Input.IsKeyPressed(Keys.F3))
         {
-            CreateNewProject();
+            projectnamevisi = true;
+            _ProjectNameInput.SetText("");
+            _ProjectNameInput.Activate(Game!.Window);
         }
 
         // Quit
@@ -148,6 +156,18 @@ public class HubScene : Scene
         var pixel = new Texture2D(Game!.GraphicsDevice, 1, 1);
         pixel.SetData(new[] { Color.White });
         _testInput.Draw(renderer.SpriteBatch, _font!, pixel);
+
+
+        //new project name input field
+        if(projectnamevisi)
+        {
+            // Draw a dark semi-transparent overlay over the whole screen
+            renderer.DrawRect(new Rectangle(0, 0, Game!.ScreenWidth, Game.ScreenHeight), new Color(0, 0, 0, 150));
+
+            // Draw the prompt text and the input field
+            renderer.SpriteBatch.DrawString(_font, "Enter project name:", new Vector2(200, 270), Color.White);
+            _ProjectNameInput.Draw(renderer.SpriteBatch, _font!, _pixel2);
+        }
     }
 
     private void ScanProjects()
@@ -195,11 +215,20 @@ public class HubScene : Scene
         var originalSolutionDir = solutionDir;
         var copiedProjectDir = Path.Combine(originalSolutionDir, "DontDelete");
 
+        //request input of new file name 
+        //tempfilename should get changed in order to change the actual file name of new projects
+
+
+        if(tempFileName=="")
+        {
+            tempFileName = "NewProjectTest";
+        }
+
         //Combines directory with projectname to make new project directory
         solutionDir = Path.Combine(solutionDir, tempFileName);
 
         //file test message for debugging
-        //tempFileTestMessage = "Creating new project in " + solutionDir+"\nCopied from template at " + copiedProjectDir;
+        //tempFileTestMessage = _testInput.Text;
 
         //makes the file paths into directory info objects for easier information transfer
         var sourceDir = new DirectoryInfo(copiedProjectDir);
