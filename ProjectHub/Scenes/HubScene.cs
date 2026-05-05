@@ -24,7 +24,7 @@ public class HubScene : Scene
     //variables for new project creation
     private Texture2D _pixel2;
     private TextInputField _ProjectNameInput;
-    Boolean projectnamevisi=false;
+    private Boolean projectnamevisi=false;
     private string tempFileTestMessage="";
     private string tempFileName = "NewProjectTest";
 
