@@ -6,10 +6,6 @@ using SampleGame.Components;
 
 namespace SampleGame.Scenes;
 
-/// <summary>
-/// The main gameplay scene.
-/// Creates a player square that moves with WASD. Press Escape for pause menu.
-/// </summary>
 public class GameScene : Scene
 {
     private GameObject _player = null!;

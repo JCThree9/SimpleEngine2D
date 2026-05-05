@@ -2,17 +2,13 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
 using Engine.Core;
 using Engine.Rendering;
+using Engine.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SimpleEngine2D.Engine.UI;
 
 namespace ProjectHub.Scenes;
 
-/// <summary>
-/// The project hub scene — lists game projects found in the parent directory
-/// and lets you launch them by clicking or pressing Enter.
-/// </summary>
 public class HubScene : Scene
 {
     private TextInputField _testInput;

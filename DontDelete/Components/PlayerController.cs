@@ -5,10 +5,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SampleGame.Components;
 
-/// <summary>
-/// Moves a GameObject with WASD or arrow keys.
-/// Demonstrates how a game-specific component uses the engine.
-/// </summary>
 public class PlayerController : Component
 {
     public float MoveSpeed { get; set; } = 200f;

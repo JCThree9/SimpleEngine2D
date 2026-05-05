@@ -3,10 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Rendering;
 
-/// <summary>
-/// Wraps MonoGame's SpriteBatch to provide simple draw calls.
-/// Automatically applies the Camera's view matrix.
-/// </summary>
 public class Renderer
 {
     private readonly SpriteBatch _spriteBatch;
@@ -26,10 +22,8 @@ public class Renderer
         _pixel.SetData(new[] { Color.White });
     }
 
-    /// <summary>The underlying SpriteBatch, if you need direct access.</summary>
     public SpriteBatch SpriteBatch => _spriteBatch;
 
-    /// <summary>Begin a draw batch with the camera transform applied.</summary>
     public void Begin()
     {
         _spriteBatch.Begin(
@@ -38,13 +32,11 @@ public class Renderer
         );
     }
 
-    /// <summary>Begin a screen-space draw batch (no camera transform — for UI).</summary>
     public void BeginUI()
     {
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
     }
 
-    /// <summary>End the current draw batch.</summary>
     public void End()
     {
         _spriteBatch.End();
@@ -52,7 +44,6 @@ public class Renderer
 
     // Draw helpers 
 
-    /// <summary>Draw a texture at a position.</summary>
     public void DrawSprite(Texture2D texture, Vector2 position, Color? color = null,
         float rotation = 0f, Vector2? scale = null, Rectangle? sourceRect = null)
     {
@@ -73,13 +64,11 @@ public class Renderer
         );
     }
 
-    /// <summary>Draw a filled rectangle.</summary>
     public void DrawRect(Rectangle rect, Color color)
     {
         _spriteBatch.Draw(_pixel, rect, color);
     }
 
-    /// <summary>Draw a filled rectangle at a position with a size.</summary>
     public void DrawRect(Vector2 position, Vector2 size, Color color)
     {
         _spriteBatch.Draw(_pixel, new Rectangle(
@@ -90,7 +79,6 @@ public class Renderer
         ), color);
     }
 
-    /// <summary>Draw text using a SpriteFont.</summary>
     public void DrawText(SpriteFont font, string text, Vector2 position, Color color)
     {
         _spriteBatch.DrawString(font, text, position, color);

@@ -1,0 +1,46 @@
+{
+  "GameObjects": [
+    {
+      "Name": "Player",
+      "IsActive": true,
+      "Transform": {
+        "PositionX": -52,
+        "PositionY": -38,
+        "Rotation": 0,
+        "ScaleX": 1,
+        "ScaleY": 1,
+        "SizeX": 40,
+        "SizeY": 40
+      },
+      "Components": [
+        {
+          "TypeName": "SampleGame.Components.PlayerController, SampleGame, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "Properties": {
+            "MoveSpeed": "250"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "New Object",
+      "IsActive": true,
+      "Transform": {
+        "PositionX": 0,
+        "PositionY": 0,
+        "Rotation": 0,
+        "ScaleX": 1,
+        "ScaleY": 1,
+        "SizeX": 40,
+        "SizeY": 40
+      },
+      "Components": [
+        {
+          "TypeName": "SampleGame.Components.PlayerController, SampleGame, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "Properties": {
+            "MoveSpeed": "200"
+          }
+        }
+      ]
+    }
+  ]
+}

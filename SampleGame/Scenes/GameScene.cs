@@ -6,22 +6,17 @@ using SampleGame.Components;
 
 namespace SampleGame.Scenes;
 
-/// <summary>
-/// The main gameplay scene.
-/// Creates a player square that moves with WASD. Press Escape for pause menu.
-/// </summary>
 public class GameScene : Scene
 {
-    private GameObject _player = null!;
-
     public override void Initialize()
     {
         // Create the player at world origin (0,0)
         // The camera is centered on (0,0), so this appears at the center of the screen
-        _player = new GameObject("Player");
-        _player.Transform.Position = Vector2.Zero;
-        _player.AddComponent(new PlayerController { MoveSpeed = 250f });
-        AddGameObject(_player);
+        var player = new GameObject("Player");
+        player.Transform.Position = Vector2.Zero;
+        player.Transform.Size = new Vector2(40, 40);
+        player.AddComponent(new PlayerController { MoveSpeed = 250f });
+        AddGameObject(player);
     }
 
     public override void Update(GameTime gameTime)
@@ -35,12 +30,14 @@ public class GameScene : Scene
 
     public override void Draw(Renderer renderer)
     {
-        // Draw the player as a colored rectangle (no sprite needed yet)
-        renderer.DrawRect(
-            _player.Transform.Position,
-            new Vector2(40, 40),
-            Color.Cyan
-        );
+        foreach (var gameObject in GameObjects)
+        {
+            renderer.DrawRect(
+                gameObject.Transform.Position,
+                gameObject.Transform.Size,
+                Color.Cyan
+            );
+        }
 
         // Draw a ground bar across the world, below center
         renderer.DrawRect(
