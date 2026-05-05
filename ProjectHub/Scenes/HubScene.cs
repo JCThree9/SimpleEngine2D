@@ -48,7 +48,14 @@ public class HubScene : Scene
         //projectcreation initlizations
         _pixel2 = new Texture2D(Game!.GraphicsDevice, 1, 1);
         _pixel2.SetData(new[] { Color.White });
-        _ProjectNameInput = new TextInputField(new Rectangle(200, 300, 400, 40), "");
+        int panelW = 500;
+        int panelH = 150;
+        int inputW = 400;
+        int inputH = 40;
+        int panelY = (Game!.ScreenHeight - panelH) / 2;
+        int inputY = panelY + 70;
+        
+        _ProjectNameInput = new TextInputField(new Rectangle((Game.ScreenWidth - inputW) / 2, inputY, inputW, inputH), "");
         // When they press Enter
         _ProjectNameInput.OnConfirmed += (name) =>
         {
@@ -182,9 +189,9 @@ public class HubScene : Scene
                 new Vector2(300, y + 12), Color.DarkGray);
         }
         // Draw test input field
-        var pixel = new Texture2D(Game!.GraphicsDevice, 1, 1);
-        pixel.SetData(new[] { Color.White });
-        _testInput.Draw(renderer.SpriteBatch, _font!, pixel);
+        //var pixel = new Texture2D(Game!.GraphicsDevice, 1, 1);
+        //pixel.SetData(new[] { Color.White });
+        //_testInput.Draw(renderer.SpriteBatch, _font!, pixel);
 
 
         //new project name input field
@@ -193,8 +200,24 @@ public class HubScene : Scene
             // Draw a dark semi-transparent overlay over the whole screen
             renderer.DrawRect(new Rectangle(0, 0, Game!.ScreenWidth, Game.ScreenHeight), new Color(0, 0, 0, 150));
 
-            // Draw the prompt text and the input field
-            renderer.SpriteBatch.DrawString(_font, "Enter project name:", new Vector2(200, 270), Color.White);
+            // Panel dimensions
+            int panelW = 500;
+            int panelH = 150;
+            int panelX = (Game.ScreenWidth - panelW) / 2;
+            int panelY = (Game.ScreenHeight - panelH) / 2;
+
+            // Draw outer panel (dark tone border)
+            renderer.DrawRect(new Rectangle(panelX, panelY, panelW, panelH), new Color(40, 60, 90));
+            // Draw inner panel (lighter tone background)
+            renderer.DrawRect(new Rectangle(panelX + 4, panelY + 4, panelW - 8, panelH - 8), new Color(20, 20, 28));
+
+            // Draw the prompt text centered horizontally
+            string prompt = "Enter project name:";
+            Vector2 textSize = _font.MeasureString(prompt);
+            Vector2 textPos = new Vector2(panelX + (panelW - textSize.X) / 2, panelY + 20);
+            renderer.SpriteBatch.DrawString(_font, prompt, textPos, Color.White);
+
+            // Draw the input field
             _ProjectNameInput.Draw(renderer.SpriteBatch, _font!, _pixel2);
         }
     }
