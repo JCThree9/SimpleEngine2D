@@ -4,11 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Debug;
 
-/// <summary>
-/// Simple on-screen debug overlay showing FPS, entity count, and scene info.
-/// Toggle with F1. Just an overlay right now.
-/// ImGui can be integrated later for some of the features we planned
-/// </summary>
 public class DebugOverlay
 {
     private bool _isVisible = false;
@@ -27,13 +22,11 @@ public class DebugOverlay
         _game = game;
     }
 
-    /// <summary>Load the debug font. Call from EngineGame.LoadContent.</summary>
     public void LoadContent(SpriteFont font)
     {
         _font = font;
     }
 
-    /// <summary>Toggle visibility.</summary>
     public void Toggle() => _isVisible = !_isVisible;
 
     public void Update(GameTime gameTime)

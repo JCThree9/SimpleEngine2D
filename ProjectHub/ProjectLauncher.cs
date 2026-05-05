@@ -2,14 +2,8 @@ using System.Diagnostics;
 
 namespace ProjectHub;
 
-/// <summary>
-/// Launches a .NET game project in a new process.
-/// </summary>
 public static class ProjectLauncher
 {
-    /// <summary>
-    /// Launch the game project at the given directory path.
-    /// </summary>
     public static void Launch(string projectPath)
     {
         try

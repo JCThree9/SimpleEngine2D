@@ -4,27 +4,18 @@ using Microsoft.Xna.Framework;
 
 namespace Engine.GameObjects;
 
-/// <summary>
-/// A game entity. Has a Transform and a list of Components.
-/// Components provide all the behavior (movement, rendering, etc.).
-/// </summary>
 public class GameObject
 {
     private readonly List<Component> _components = new();
-    //These pending lists exist for the same reason we have a buffer in SceneManager, to avoid data being altered mid frame
     private readonly List<Component> _pendingAdd = new();
     private readonly List<Component> _pendingRemove = new();
 
-    /// <summary>Display name for debugging.</summary>
     public string Name { get; set; }
 
-    /// <summary>Whether this object is active. Inactive objects skip Update/Draw.</summary>
     public bool IsActive { get; set; } = true;
 
-    /// <summary>The scene this object belongs to (set automatically when added to a scene).</summary>
     public Scene? Scene { get; internal set; }
 
-    /// <summary>Position, rotation, and scale. Important to note, Transform is NOT a component, its a required object that must be attatched to a game object</summary>
     public Transform Transform { get; } = new();
 
     public GameObject(string name = "GameObject")
@@ -32,57 +23,46 @@ public class GameObject
         Name = name;
     }
 
-    /// <summary>
-    /// Attach a component to this GameObject.
-    /// Returns the component for chaining.
-    /// </summary>
     public T AddComponent<T>(T component) where T : Component
     {
         component.Owner = this;
+
+        if (_components.Contains(component) || _pendingAdd.Contains(component))
+            return component;
+
+        _pendingRemove.Remove(component);
         _pendingAdd.Add(component);
         return component;
     }
 
-    /// <summary>Find the first component of type T, or null.</summary>
     public T? GetComponent<T>() where T : Component
     {
-        foreach (var c in _components)
-            if (c is T match) return match;
-
-        // Also check pending adds
-        foreach (var c in _pendingAdd)
+        foreach (var c in Components)
             if (c is T match) return match;
 
         return null;
     }
 
-    /// <summary>Remove a component by reference.</summary>
     public void RemoveComponent(Component component)
     {
+        if (_pendingAdd.Remove(component))
+            return;
+
+        if (!_components.Contains(component) || _pendingRemove.Contains(component))
+            return;
+
         _pendingRemove.Add(component);
     }
 
-    /// <summary>All components currently on this object (read-only).</summary>
-    public IReadOnlyList<Component> Components => _components;
+    public IReadOnlyList<Component> Components =>
+        _components
+            .Where(component => !_pendingRemove.Contains(component))
+            .Concat(_pendingAdd)
+            .ToList();
 
     internal void Update(GameTime gameTime)
     {
-        // Flush pending changes
-        if (_pendingAdd.Count > 0)
-        {
-            foreach (var c in _pendingAdd)
-            {
-                _components.Add(c);
-                c.Initialize();
-            }
-            _pendingAdd.Clear();
-        }
-        if (_pendingRemove.Count > 0)
-        {
-            foreach (var c in _pendingRemove)
-                _components.Remove(c);
-            _pendingRemove.Clear();
-        }
+        FlushPendingComponents();
 
         if (!IsActive) return;
 
@@ -95,12 +75,39 @@ public class GameObject
 
     internal void Draw(Renderer renderer)
     {
+        FlushPendingComponents();
+
         if (!IsActive) return;
 
         foreach (var component in _components)
         {
             if (component.Enabled)
                 component.Draw(renderer);
+        }
+    }
+
+    private void FlushPendingComponents()
+    {
+        if (_pendingAdd.Count > 0)
+        {
+            foreach (var component in _pendingAdd)
+            {
+                if (_components.Contains(component))
+                    continue;
+
+                _components.Add(component);
+                component.Initialize();
+            }
+
+            _pendingAdd.Clear();
+        }
+
+        if (_pendingRemove.Count > 0)
+        {
+            foreach (var component in _pendingRemove)
+                _components.Remove(component);
+
+            _pendingRemove.Clear();
         }
     }
 }

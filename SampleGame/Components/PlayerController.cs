@@ -1,16 +1,14 @@
 using Engine.Core;
+using Engine.Editor;
 using Engine.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace SampleGame.Components;
 
-/// <summary>
-/// Moves a GameObject with WASD or arrow keys.
-/// Demonstrates how a game-specific component uses the engine.
-/// </summary>
 public class PlayerController : Component
 {
+    [EditorVisible]
     public float MoveSpeed { get; set; } = 200f;
 
     public override void Update(GameTime gameTime)

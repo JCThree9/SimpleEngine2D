@@ -5,10 +5,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SampleGame.Scenes;
 
-/// <summary>
-/// Simple pause screen. Overlays on top of the GameScene.
-/// Press Escape or Enter to unpause.
-/// </summary>
 public class PauseScene : Scene
 {
     public override void Initialize()

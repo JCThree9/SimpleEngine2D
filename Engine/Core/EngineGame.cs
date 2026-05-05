@@ -1,47 +1,37 @@
 using Engine.Debug;
+using Engine.Editor;
 using Engine.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Core;
 
-/// <summary>
-/// The main game class. Extends MonoGame's Game and wires together
-/// all engine systems (input, scenes, rendering, debug).
-///
-/// Game projects should NOT extend this class — instead, create Scenes
-/// and push them via Scenes.Push().
-/// </summary>
 public class EngineGame : Game
 {
     private readonly GraphicsDeviceManager _graphics;
     private Renderer _renderer = null!;
     private Camera _camera = null!;
     private DebugOverlay _debug = null!;
+    private EditorOverlay _editor = null!;
 
-    /// <summary>The input manager. Use to check keyboard/mouse state.</summary>
     public InputManager Input { get; } = new();
 
-    /// <summary>The scene manager. Use to push/pop/switch scenes.</summary>
     public SceneManager Scenes { get; } = new();
 
-    /// <summary>The renderer. Passed to Scene.Draw() automatically.</summary>
     public Renderer Renderer => _renderer;
 
-    /// <summary>The camera. Adjust Position and Zoom to move the view.</summary>
     public Camera Camera => _camera;
 
-    /// <summary>The debug overlay. Toggle with F1 in sample game .</summary>
     public DebugOverlay Debug => _debug;
 
-    /// <summary>Window width in pixels.</summary>
+    public EditorOverlay Editor => _editor;
+
     public int ScreenWidth
     {
         get => _graphics.PreferredBackBufferWidth;
         set { _graphics.PreferredBackBufferWidth = value; _graphics.ApplyChanges(); }
     }
 
-    /// <summary>Window height in pixels.</summary>
     public int ScreenHeight
     {
         get => _graphics.PreferredBackBufferHeight;
@@ -74,18 +64,21 @@ public class EngineGame : Game
         _camera = new Camera(GraphicsDevice.Viewport);
         _renderer = new Renderer(GraphicsDevice, _camera);
         _debug = new DebugOverlay(this);
+        _editor = new EditorOverlay(this);
 
-        // Try to load the debug font — it's optional
+        
         try
         {
             var debugFont = Content.Load<SpriteFont>("DebugFont");
             _debug.LoadContent(debugFont);
+            _editor.LoadContent(debugFont);
         }
         catch
         {
-            // No debug font available — overlay text won't render.
-            // Games need to add a DebugFont.spritefont to their Content pipeline.
+            
         }
+
+        ComponentRegistry.Initialize();
 
         // Process any scenes that were pushed before Run() was called
         Scenes.ProcessPending();
@@ -96,9 +89,10 @@ public class EngineGame : Game
         Time.Update(gameTime);
         Input.Update();
         _debug.Update(gameTime);
+        _editor.Update(gameTime);
 
-        // Let SceneManager handle scene lifecycle + update
-        Scenes.Update(gameTime);
+        if (!_editor.IsVisible || !_editor.HasFocus)
+            Scenes.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -124,6 +118,7 @@ public class EngineGame : Game
 
         // Draw debug overlay (screen-space, no camera)
         _debug.Draw(_renderer.SpriteBatch);
+        _editor.Draw(_renderer.SpriteBatch);
 
         base.Draw(gameTime);
     }
