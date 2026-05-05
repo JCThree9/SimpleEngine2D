@@ -103,6 +103,25 @@ public class HubScene : Scene
             _inputCooldown = 0.15f;
         }
 
+        if (_projectPaths.Count > 0)
+        {
+            var mousePos = Input.MousePosition;
+
+            for (int i = 0; i < _projectPaths.Count; i++)
+            {
+                var y = 80 + i * 50;
+                var rowRect = new Rectangle(10, y, Game!.ScreenWidth - 20, 44);
+
+                if (rowRect.Contains(mousePos))
+                {
+                    _selectedIndex = i;
+
+                    if (Input.IsLeftMousePressed())
+                        ProjectLauncher.Launch(_projectPaths[_selectedIndex]);
+                }
+            }
+        }
+
         // Launch selected project
         if (Input.IsKeyPressed(Keys.Enter) && _projectPaths.Count > 0)
         {
