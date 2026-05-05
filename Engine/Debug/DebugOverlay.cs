@@ -83,7 +83,7 @@ public class DebugOverlay
             y += lineHeight;
         }
 
-        DrawLine("[F1] Toggle Debug", x, y, Color.Gray);
+        DrawLine("[F1] Toggle Debug\n[F2] Toggle Editor", x, y, Color.Gray);
 
         spriteBatch.End();
 
